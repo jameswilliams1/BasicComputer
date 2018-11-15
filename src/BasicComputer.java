@@ -57,22 +57,24 @@ public class BasicComputer {
         memory[memoryLoc] = accumulator;
     }
 
-    // Add a word from memory location to the current value of accumulator
+    // Add a word from memory location to the current value of accumulator (leaving result in accumulator)
     // Code 21
     private void add(int memoryLoc) {
         accumulator += memory[memoryLoc];
     }
 
-    // Subtract the current accumulator from a word at memory location (leaving result in accumulator)
+    // Subtract a word at memory location from the current accumulator (leaving result in accumulator)
     // Code 20
     private void subtract(int memoryLoc) {
-        accumulator = memory[memoryLoc] - accumulator;
+        accumulator -= memory[memoryLoc];
+        //TODO check this is the right order
     }
 
     // Divide a word from memory location into the current accumulator (leaving result in accumulator)
     // Code 11
     private void divide(int memoryLoc) {
         accumulator = memory[memoryLoc] / accumulator;
+        //TODO check this is the right order
     }
 
     // Load immediate operand into accumulator
@@ -81,20 +83,21 @@ public class BasicComputer {
         accumulator = operand;
     }
 
-    // Add immediate operand to the accumlator
+    // Add immediate operand to the accumulator (leaving result in accumulator)
     // Code 06
     private void addImm(int operand) {
         accumulator += operand;
     }
 
-    // Subtract immediate operand from accumulator
+    // Subtract immediate operand from accumulator (leaving result in accumulator)
     // Code 07
     private void decImm(int operand) {
         accumulator -= operand;
+        //TODO check this is the right order
     }
 
     // Multiply accumulator by the immediate operand
-    // Code 10
+    // Code 08
     private void multImm(int operand) {
         accumulator *= operand;
     }
@@ -103,6 +106,7 @@ public class BasicComputer {
     // Code 09
     private void divideImm(int operand) {
         accumulator = operand / accumulator;
+        //TODO check this is the right order
     }
 
     // Multiply accumulator by a word from memory location
@@ -149,12 +153,12 @@ public class BasicComputer {
     }
 
     // Decrement word in memory location by 1
-    // Code 25
+    // Code 26
     private void decrement(int memoryLoc){
         memory[memoryLoc] -= 1;
     }
 
-    // Halt the program and print a memory dump
+    // Halt the program and print a variables & memory dump
     // Code 50
     private void halt(){
         System.out.println("---- Basic-Computer execution terminated ---");
