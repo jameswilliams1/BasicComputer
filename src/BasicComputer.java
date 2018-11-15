@@ -1,13 +1,25 @@
+import java.text.DecimalFormat;
 import java.util.Scanner;
 
 public class BasicComputer {
 
-    private int accumulator = 00; // Accumulator register
-    private int programCounter = 00; // Memory location that contains current instruction
-    private int instructRegister = 00; // Next instruction to be performed
-    private int opCode = 00; // Operation currently being executed
-    private int operand = 00; // Memory location on which current instruction operates
-    private int[] memory; // Array of memory values
+    private int accumulator; // Accumulator register
+    private int programCounter; // Memory location that contains current instruction
+    private int instructRegister; // Next instruction to be performed
+    private int opCode; // Operation currently being executed
+    private int operand; // Memory location on which current instruction operates
+    public int[] memory; // Array of memory values
+
+
+    // Set all registers to 0 and memory size to 100
+    public BasicComputer() {
+        this.accumulator = 0000;
+        this.programCounter = 00;
+        this.instructRegister = 0000;
+        this.opCode = 00;
+        this.operand = 00;
+        this.memory = new int[100];
+    }
 
     // Write series of words (ints) from memory from index memoryLoc, with length given by accumulator
     // Code 34
@@ -148,21 +160,59 @@ public class BasicComputer {
 
     // Increment word in memory location by 1
     // Code 25
-    private void increment(int memoryLoc){
+    private void increment(int memoryLoc) {
         memory[memoryLoc] += 1;
     }
 
     // Decrement word in memory location by 1
     // Code 26
-    private void decrement(int memoryLoc){
+    private void decrement(int memoryLoc) {
         memory[memoryLoc] -= 1;
     }
 
-    // Halt the program and print a variables & memory dump
+    // Halt the program and print a memory dump and all registers
     // Code 50
-    private void halt(){
+    private void halt() {
         System.out.println("---- Basic-Computer execution terminated ---");
-        //TODO print memory dump
+        printAll();
+    }
+
+    // Print a memory dump and all registers
+    public void printAll() {
+        System.out.println();
+        System.out.println("Registers:");
+        System.out.println();
+        System.out.printf("Accumulator           %+05d", accumulator);
+        System.out.println();
+        System.out.printf("Program Counter        %02d", programCounter);
+        System.out.println();
+        System.out.printf("Instruction Register  %+05d", instructRegister);
+        System.out.println();
+        System.out.printf("Operation Code         %02d", opCode);
+        System.out.println();
+        System.out.printf("Operand                %02d", operand);
+        System.out.println();
+        System.out.println();
+
+        // Array of 10 lines of 10 elements from memory
+        String[] lines = new String[10];
+        // Shows memory in a consistent format with signs
+        DecimalFormat fourNum = new DecimalFormat("+0000");
+        DecimalFormat twoNum = new DecimalFormat("00");
+        // Makes print friendly string from each 10 memory values
+        for (int i = 0; i < lines.length; i++) {
+            String line = "";
+            for (int j = i * 10; j < i * 10 + 10; j++) {
+                line += (fourNum.format(memory[j])) + "  ";
+            }
+            lines[i] = line;
+        }
+        System.out.println("Memory Dump:");
+        System.out.println();
+        System.out.println("     0      1      2      3      4      5      6      7      8      9");
+        for (int i = 0; i < lines.length; i++) {
+            System.out.println(twoNum.format(i) + "  " + lines[i]);
+        }
     }
 
 }
