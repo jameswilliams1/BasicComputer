@@ -3,6 +3,13 @@ import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Scanner;
 
+/**
+ * This class simulates a basic computer that reads a list of commands (the program) that has one 4 digit int per line
+ * ("basic computer machine language"). It first stores commands/variables into memory (100 memory blocks are available)
+ * and tries to run a command from sequential memory locations starting at 00. It crashes showing an error if any value
+ * is >9999 or <-9999, if an attempt to divide by 0 is made, an invalid operation code is entered, or if the accumulator
+ * (capped at +/-9999) overflows.
+ */
 public class BasicComputer {
 
     private int accumulator; // Accumulator register
@@ -41,7 +48,6 @@ public class BasicComputer {
     // Write series of words from memory from index memoryLoc, with length given by accumulator
     // Code 35
     private void writeAscii(int memoryLoc) throws ArrayIndexOutOfBoundsException {
-        System.out.println("ascii******");
         int i = 0;
         int memoryIndex = memoryLoc;
         while (i < accumulator) {
@@ -265,7 +271,8 @@ public class BasicComputer {
         // Array of 10 lines of 10 elements from memory
         String[] lines = new String[10];
         // Shows memory in a consistent format with signs
-        DecimalFormat fourNum = new DecimalFormat("+0000");
+        DecimalFormat fourNum = new DecimalFormat("0000");
+        fourNum.setPositivePrefix("+");
         DecimalFormat twoNum = new DecimalFormat("00");
         // Makes print friendly string from each 10 memory values
         for (int i = 0; i < lines.length; i++) {
@@ -279,7 +286,7 @@ public class BasicComputer {
         System.out.println();
         System.out.println("     0      1      2      3      4      5      6      7      8      9");
         for (int i = 0; i < lines.length; i++) {
-            System.out.println(twoNum.format(i*10) + "  " + lines[i]);
+            System.out.println(twoNum.format(i * 10) + "  " + lines[i]);
         }
     }
 
@@ -353,7 +360,6 @@ public class BasicComputer {
         DecimalFormat fourNum = new DecimalFormat("0000");
         Scanner keyboard = new Scanner(System.in);
         while (true) {
-            System.out.println(programCounter);
             instructRegister = memory[programCounter];
             String instruction = fourNum.format(instructRegister); // Converts instruction to useful format eg 0911 instead of 911
             opCode = Integer.parseInt(instruction.substring(0, 2));
