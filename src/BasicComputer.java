@@ -1,5 +1,6 @@
 import java.io.*;
 import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class BasicComputer {
@@ -13,7 +14,7 @@ public class BasicComputer {
     private boolean validProgram; // Stops computer running if no appropriate program is input
 
 
-    // Set all registers to 0 and memory size to 100
+    // Set all registers to 0 and memory size to 100 (all values 0)
     public BasicComputer() {
         this.accumulator = 0000;
         this.programCounter = 00;
@@ -21,13 +22,13 @@ public class BasicComputer {
         this.opCode = 00;
         this.operand = 00;
         this.memory = new int[100];
+        Arrays.fill(this.memory, 0);
         this.validProgram = false;
-        //TODO set all memory locs to 0000
     }
 
     // Write series of words (ints) from memory from index memoryLoc, with length given by accumulator
     // Code 34
-    private void writeValue(int memoryLoc) {
+    private void writeValue(int memoryLoc) throws ArrayIndexOutOfBoundsException {
         //TODO add bounds checking
         int i = 0;
         int memoryIndex = memoryLoc; // Initial memory location to write from
@@ -40,13 +41,12 @@ public class BasicComputer {
 
     // Write series of words from memory from index memoryLoc, with length given by accumulator
     // Code 35
-    private void writeAscii(int memoryLoc) {
+    private void writeAscii(int memoryLoc) throws ArrayIndexOutOfBoundsException {
         //TODO add bounds checking
-        //TODO check ascii
         int i = 0;
         int memoryIndex = memoryLoc;
         while (i < accumulator) {
-            System.out.print((char) memory[memoryIndex]);
+            System.out.print(Character.toString((char) memory[memoryIndex]));
             i++;
             memoryIndex++;
         }
@@ -106,18 +106,16 @@ public class BasicComputer {
         } else {
             accumulator = newAcc;
         }
-        //TODO check this is the right order
     }
 
     // Divide a word from memory location into the current accumulator (leaving result in accumulator)
     // Code 11
     private void divide(int memoryLoc) throws IllegalArgumentException {
-        if (accumulator == 0) {
+        if (memory[memoryLoc] == 0) {
             throw new IllegalArgumentException();
         } else {
-            accumulator = memory[memoryLoc] / accumulator;
+            accumulator /= memory[memoryLoc];
         }
-        //TODO check this is the right order
     }
 
     // Load immediate operand into accumulator
@@ -150,7 +148,6 @@ public class BasicComputer {
         } else {
             accumulator = newAcc;
         }
-        //TODO check this is the right order
     }
 
     // Multiply accumulator by the immediate operand
@@ -169,12 +166,11 @@ public class BasicComputer {
     // Divide immediate operand into accumulator (leaving result in accumulator)
     // Code 09
     private void divideImm(int operand) throws IllegalArgumentException {
-        if (accumulator == 0) {
+        if (operand == 0) {
             throw new IllegalArgumentException();
         } else {
-            accumulator = operand / accumulator;
+            accumulator /= operand;
         }
-        //TODO check this is the right order
     }
 
     // Multiply accumulator by a word from memory location
@@ -194,7 +190,6 @@ public class BasicComputer {
     // Code 43
     private void branch(int memoryLoc) {
         programCounter = memory[memoryLoc];
-        //TODO execute program in programCounter here
     }
 
     // Branch to memory location and continue execution from the value there if accumulator is negative
@@ -366,11 +361,21 @@ public class BasicComputer {
             programCounter++;
             switch (opCode) { // Each case = valid opCode defined above
                 case 34:
-                    writeValue(operand);
-                    break;
+                    try {
+                        writeValue(operand);
+                        break;
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        printError("index");
+                        return;
+                    }
                 case 35:
-                    writeAscii(operand);
-                    break;
+                    try {
+                        writeAscii(operand);
+                        break;
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        printError("index");
+                        return;
+                    }
                 case 33:
                     try {
                         read(operand, keyboard);
@@ -499,11 +504,10 @@ public class BasicComputer {
                 case 50:
                     halt();
                     return;
-
-
+                default:
+                    printError("opcode");
+                    return;
             }
-
-
         }
     }
 
