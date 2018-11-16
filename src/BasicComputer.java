@@ -10,7 +10,7 @@ public class BasicComputer {
     private int instructRegister; // Next instruction to be performed
     private int opCode; // Operation currently being executed
     private int operand; // Memory location on which current instruction operates
-    public int[] memory; // Array of memory values
+    private int[] memory; // Array of memory values
     private boolean validProgram; // Stops computer running if no appropriate program is input
 
 
@@ -29,7 +29,6 @@ public class BasicComputer {
     // Write series of words (ints) from memory from index memoryLoc, with length given by accumulator
     // Code 34
     private void writeValue(int memoryLoc) throws ArrayIndexOutOfBoundsException {
-        //TODO add bounds checking
         int i = 0;
         int memoryIndex = memoryLoc; // Initial memory location to write from
         while (i < accumulator) {
@@ -42,7 +41,7 @@ public class BasicComputer {
     // Write series of words from memory from index memoryLoc, with length given by accumulator
     // Code 35
     private void writeAscii(int memoryLoc) throws ArrayIndexOutOfBoundsException {
-        //TODO add bounds checking
+        System.out.println("ascii******");
         int i = 0;
         int memoryIndex = memoryLoc;
         while (i < accumulator) {
@@ -189,7 +188,7 @@ public class BasicComputer {
     // Branch to memory location and continue execution from the value there
     // Code 43
     private void branch(int memoryLoc) {
-        programCounter = memory[memoryLoc];
+        programCounter = memoryLoc;
     }
 
     // Branch to memory location and continue execution from the value there if accumulator is negative
@@ -280,7 +279,7 @@ public class BasicComputer {
         System.out.println();
         System.out.println("     0      1      2      3      4      5      6      7      8      9");
         for (int i = 0; i < lines.length; i++) {
-            System.out.println(twoNum.format(i) + "  " + lines[i]);
+            System.out.println(twoNum.format(i*10) + "  " + lines[i]);
         }
     }
 
@@ -354,6 +353,7 @@ public class BasicComputer {
         DecimalFormat fourNum = new DecimalFormat("0000");
         Scanner keyboard = new Scanner(System.in);
         while (true) {
+            System.out.println(programCounter);
             instructRegister = memory[programCounter];
             String instruction = fourNum.format(instructRegister); // Converts instruction to useful format eg 0911 instead of 911
             opCode = Integer.parseInt(instruction.substring(0, 2));
